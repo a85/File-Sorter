@@ -6,7 +6,22 @@ import sys
 import time
 
 types = {'directory': 'Directory',
+         '': 'Text',
+         '.apk': 'Android',
+         '.iso': 'Software',
          '.sql': 'Databases',
+         '.jnlp': 'Java',
+         '.aspx': 'Scripts',
+         '.js': 'Scripts',
+         '.application': 'Software',
+         '.xlsx': 'Documents',
+         '.JPG': 'Graphics',
+         '.csv': 'Databases',
+         '.swf': 'Flash',
+         '.c': 'Scripts',
+         '.phtml': 'Scripts',
+         '.xls': 'Documents',
+         '.dotx': 'Documents',
          '.sql.gz': 'Databases',
          '.tgz': 'Databases',
          '.tar.gz': 'Databases',
@@ -14,7 +29,9 @@ types = {'directory': 'Directory',
          '.doc': 'Documents',
          '.docx': 'Documents',
          '.exe': 'Software',
-         '.air': 'Software',         
+         '.air': 'Software',
+         '.msi': 'Software',
+         '.jar': 'Libraries',
          '.zip': 'Zipped',
          '.rar': 'Zipped',
          '.tar': 'Zipped',
@@ -59,15 +76,23 @@ def sort_files(folder_name, dest):
     for file in files:
         p = os.path.join(folder_name, file)
         if os.path.isdir(p) == True:
-            d = os.path.join(dest, types['directory'])
-            shutil.move(p, d)
-            print "Moving " + p + " to " + d
+            if file not in types.values():
+                d = os.path.join(dest, types['directory'])
+                try:
+                    shutil.move(p, d)
+                    print "Moving " + p + " to " + d
+                except:
+                    print "Can't access " + p
+                print "Moving " + p + " to " + d
         else:
             ext = os.path.splitext(p)[1]
             if types.has_key(ext):
                 d = os.path.join(dest, types[ext]);
-                shutil.move(p, d)
-                print "Moving " + p + " to " + d
+                try:
+                    shutil.move(p, d)
+                    print "Moving " + p + " to " + d
+                except:
+                    print "Can't access " + p
             else:
                 print "Leaving " + p
                 
@@ -77,13 +102,13 @@ def main():
     parser.add_option("-d", "--destination", dest="destination", help="Directory you want to move files or directories to")
     (options, args) = parser.parse_args()
 
-    directory = args[0]
+    if args:
+        directory = args[0]
+    else:
+        directory = os.getcwd()
+        
     destination = options.destination
     
-    if not args:
-        parser.print_help()
-        sys.exit(1)
-
     if not os.path.exists(directory):
         print "Invalid directory", directory
         sys.exit(1)
