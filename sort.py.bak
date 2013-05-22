@@ -9,11 +9,8 @@ types = {'directory': 'Directory',
          '.apk': 'Android',
          '.iso': 'Software',
          '.sql': 'Databases',
-         '.odb': 'Databases',
-         '.mwb': 'Databases',
          '.jnlp': 'Java',
          '.aspx': 'Scripts',
-         '.pl': 'Scripts',
          '.js': 'Scripts',
          '.application': 'Software',
          '.xlsx': 'Documents',
@@ -31,6 +28,7 @@ types = {'directory': 'Directory',
          '.tar.gz': 'Databases',
          '.pdf': 'PDFs',
          '.doc': 'Documents',
+         '.tex': 'Documents',
          '.docx': 'Documents',
          '.exe': 'Software',
          '.air': 'Software',
@@ -46,14 +44,8 @@ types = {'directory': 'Directory',
          '.html': 'Documents',
          '.xls': 'Documents',
          '.php': 'Scripts',
-         '.odt': 'Documents',
          '.ppt': 'Documents',
-         '.xcf': 'Photoshop',
          '.psd': 'Photoshop',
-         '.log': 'Logs',
-         '.aux': 'Latex',
-         '.dvi': 'Latex',
-         '.tex': 'Latex',
          '.mp3': 'Music',
          '.ogg': 'Music',
          '.wav': 'Music',
@@ -67,23 +59,14 @@ types = {'directory': 'Directory',
          '.gif': 'Graphics',
          '.tiff': 'Graphics',
          '.raw': 'Graphics',
-         '.bak': 'Bk',
-         '.bk': 'Bk',
-         '.eps': 'Graphics',
          '.bmp': 'Graphics',
          '.epub': 'Books',
-         '.fb2': 'Books',
          '.mobi': 'Books',
-         '.djvu': 'Books',
          '.rpm': 'Software',
          '.dmg': 'Software',
          '.txt': 'Text',
-         '.mht': 'Text',
          '.xml': 'Documents',
          '.dll': 'Windows DLLs',
-         '.pptx': 'Documents',
-         '.odp': 'Documents',
-         '.wbk': 'Documents',
          '.torrent': 'Torrents'}
 
 
@@ -91,7 +74,7 @@ def ensure_dir(destination):
     if not os.path.exists(destination):
         os.makedirs(destination)
 
-    for type, dir in types.items():
+    for type, dir in types.iteritems():
         path = os.path.join(destination, dir)
         if not os.path.exists(path):
             os.makedirs(path)
@@ -103,25 +86,25 @@ def sort_files(folder_name, dest):
     for file in files:
         p = os.path.join(folder_name, file)
         if os.path.isdir(p) is True:
-            if file not in list(types.values()):
+            if file not in types.values():
                 d = os.path.join(dest, types['directory'])
                 try:
                     shutil.move(p, d)
-                    print("Moving " + p + " to " + d)
+                    print "Moving " + p + " to " + d
                 except:
-                    print("Can`t access to {0}, {1}".format(p, sys.exc_info()))
-                print("Moving " + p + " to " + d)
+                    print "Can't access " + p
+                print "Moving " + p + " to " + d
         else:
             ext = os.path.splitext(p)[1]
-            if ext in list(types.keys()):  # if types.has_key(ext): deprecated
+            if ext in types.keys():  # if types.has_key(ext): deprecated
                 d = os.path.join(dest, types[ext])
                 try:
                     shutil.move(p, d)
-                    print("Moving " + p + " to " + d)
+                    print "Moving " + p + " to " + d
                 except:
-                    print("Can`t access to {0}, {1}".format(p, sys.exc_info()))
+                    print "Can't access " + p
             else:
-                print("Leaving " + p)
+                print "Leaving " + p
 
 
 def main():
@@ -137,17 +120,17 @@ def main():
     destination = options.destination
 
     if not os.path.exists(directory):
-        print("Invalid directory", directory)
+        print "Invalid directory", directory
         sys.exit(1)
 
     if not destination:
-        print("Invalid destination")
+        print "Invalid destination"
         sys.exit(1)
 
     ensure_dir(destination)
     sort_files(directory, destination)
 
-    print(time.time())
+    print time.time()
 
 if __name__ == "__main__":
     main()
