@@ -1,0 +1,13 @@
+usage: sort.py [-h] [-d DESTINATION] [-r] source
+
+Program for file sorting by file extension
+
+positional arguments:
+  source                folder to sort
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DESTINATION, --destination DESTINATION
+                        Directory you want to move files or directories to
+  -r, --recursive       Scan folders recursively. Dangerous due to the loss of
+                        information about folders hierarchy.
